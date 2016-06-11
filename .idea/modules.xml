@@ -3,8 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/androeira.iml" filepath="$PROJECT_DIR$/.idea/modules/androeira.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/androeira-app/androeira-app.iml" filepath="$PROJECT_DIR$/.idea/modules/androeira-app/androeira-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/androeira-app/myapplication3.iml" filepath="$PROJECT_DIR$/.idea/modules/androeira-app/myapplication3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/androeira-analyzer/androeira-analyzer.iml" filepath="$PROJECT_DIR$/.idea/modules/androeira-analyzer/androeira-analyzer.iml" group="androeira-analyzer" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/androeira-analyzer/androeira-analyzer_main.iml" filepath="$PROJECT_DIR$/.idea/modules/androeira-analyzer/androeira-analyzer_main.iml" group="androeira-analyzer" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/androeira-analyzer/androeira-analyzer_test.iml" filepath="$PROJECT_DIR$/.idea/modules/androeira-analyzer/androeira-analyzer_test.iml" group="androeira-analyzer" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/androeira-app/androeira-app.iml" filepath="$PROJECT_DIR$/.idea/modules/androeira-app/androeira-app.iml" group="androeira-app" />
     </modules>
   </component>
 </project>

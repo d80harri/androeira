@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.chart.LineChart?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.d80harri.androeira.analyzer.sensor.SensorPresenter">
+    <LineChart fx:id="chart" createSymbols="false">
+      <xAxis>
+          <NumberAxis side="BOTTOM" lowerBound="0" upperBound="1000"/>
+      </xAxis>
+      <yAxis>
+          <NumberAxis side="LEFT" lowerBound="-3" upperBound="3"/>
+      </yAxis>
+    </LineChart>
+</AnchorPane>
