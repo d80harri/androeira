@@ -80,7 +80,7 @@ public class AccLogService extends IntentService implements SensorEventListener 
 
     private void initialize() throws IOException {
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
         File folder = new File(Environment.getExternalStorageDirectory(), "androeira");
         folder.mkdirs();

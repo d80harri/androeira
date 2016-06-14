@@ -3,5 +3,6 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="Java Oracle" project-jdk-type="JavaSDK" />
+  <component name="IdProvider" IDEtalkID="60F8D7C7C5C91B770833599E87E8C0FA" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="Java Oracle" project-jdk-type="JavaSDK" />
 </project>
