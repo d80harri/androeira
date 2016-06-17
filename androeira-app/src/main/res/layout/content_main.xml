@@ -11,8 +11,12 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/activity_main"
-        tools:context="d80harri.org.myapplication.MainActivity">
+        tools:context="d80harri.org.app.MainActivity">
 
+    <ListView
+            android:id="@+id/serviceList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     <TextView
             android:id="@+id/serivceStarted"
             android:text="Hello World!"

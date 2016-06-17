@@ -1,6 +1,7 @@
-package d80harri.org.myapplication;
+package d80harri.org.app;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,10 +10,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
+import d80harri.org.app.socket.ServiceLocation;
+import d80harri.org.app.socket.ServiceProvider;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private boolean started = false;
+    private ListView serviceList;
+    private ServiceProvider serviceProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        this.serviceList = (ListView) findViewById(R.id.serviceList);
+        this.serviceProvider = new ServiceProvider();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final TextView serviceStarted = (TextView) findViewById(R.id.serivceStarted);
@@ -43,6 +54,20 @@ public class MainActivity extends AppCompatActivity {
                 serviceStarted.setText("Service started: " + started);
             }
         });
+            serviceProvider.setServiceAddedListener(this::onServiceAdded);
+            serviceProvider.setServiceRemovedListener(this::onServiceRemoved);
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        serviceProvider.start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute();
+
     }
 
     @Override
@@ -65,5 +90,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void onServiceAdded(ServiceLocation location) {
+        System.out.println(location.getAddress() + ": " + location.getPort());
+
+    }
+
+    private void onServiceRemoved(ServiceLocation location) {
+        System.out.println(location.getAddress() + ": " + location.getPort());
+
     }
 }

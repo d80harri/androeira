@@ -7,6 +7,9 @@ repositories {
 
 dependencies {
     compile 'com.airhacks:afterburner.fx:1.7.0'
+    compile 'javax.jmdns:jmdns:3.4.1'
+    compile 'xstream:xstream:1.2.2'
+
 
     testCompile 'junit:junit:4.11'
 }

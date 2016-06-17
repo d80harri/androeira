@@ -1,4 +1,4 @@
-package d80harri.org.myapplication;
+package d80harri.org.app;
 
 import android.app.IntentService;
 import android.content.Intent;

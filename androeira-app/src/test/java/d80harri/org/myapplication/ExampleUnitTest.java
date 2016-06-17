@@ -1,4 +1,4 @@
-package d80harri.org.myapplication;
+package d80harri.org.app;
 
 import org.junit.Test;
 

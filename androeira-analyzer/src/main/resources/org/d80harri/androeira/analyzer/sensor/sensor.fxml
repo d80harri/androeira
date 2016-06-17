@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.chart.LineChart?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.d80harri.androeira.analyzer.sensor.SensorPresenter">
    <children>
-      <GridPane>
-         <children>
-             <LineChart createSymbols="false" fx:id="xyChart" GridPane.columnIndex="1" GridPane.rowIndex="0">
-               <xAxis>
-                   <NumberAxis lowerBound="-9" side="BOTTOM" upperBound="9" autoRanging="false"/>
-               </xAxis>
-               <yAxis>
-                   <NumberAxis lowerBound="-9" side="LEFT" upperBound="9"  autoRanging="false"/>
-               </yAxis>
-             </LineChart>
-             <LineChart fx:id="yzChart" createSymbols="false" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                 <xAxis>
-                     <NumberAxis lowerBound="-9" side="BOTTOM" upperBound="9"  autoRanging="false"/>
-                 </xAxis>
-                 <yAxis>
-                     <NumberAxis lowerBound="-9" side="LEFT" upperBound="9"  autoRanging="false"/>
-                 </yAxis>
-             </LineChart>
-             <LineChart createSymbols="false" fx:id="xzChart" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                 <xAxis>
-                     <NumberAxis lowerBound="-9" side="BOTTOM" upperBound="9"  autoRanging="false"/>
-                 </xAxis>
-                 <yAxis>
-                     <NumberAxis lowerBound="-9" side="LEFT" upperBound="9"  autoRanging="false"/>
-                 </yAxis>
-             </LineChart>
-         </children>
-      </GridPane>
+      <ScrollPane hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" >
+        <content>
+                  <GridPane >
+                     <children>
+                         <LineChart GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="xyChart">
+                           <xAxis>
+                               <NumberAxis autoRanging="true" side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                               <NumberAxis  side="LEFT"  />
+                           </yAxis>
+                         </LineChart>
+                         <LineChart fx:id="yzChart" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                             <xAxis>
+                                 <NumberAxis side="BOTTOM" />
+                             </xAxis>
+                             <yAxis>
+                                 <NumberAxis side="LEFT"  />
+                             </yAxis>
+                         </LineChart>
+                         <LineChart GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="xzChart">
+                             <xAxis>
+                                 <NumberAxis side="BOTTOM" />
+                             </xAxis>
+                             <yAxis>
+                                 <NumberAxis side="LEFT" />
+                             </yAxis>
+                         </LineChart>
+                     </children>
+                     <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
+                  </GridPane>
+        </content>
+      </ScrollPane>
    </children>
 </AnchorPane>
