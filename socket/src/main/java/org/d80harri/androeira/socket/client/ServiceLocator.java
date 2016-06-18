@@ -1,7 +1,7 @@
-package d80harri.org.app.socket;
+package org.d80harri.androeira.socket.client;
 
 
-import android.hardware.ConsumerIrManager;
+import org.d80harri.androeira.socket.intf.ServiceLocation;
 
 import javax.jmdns.*;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by d80harri on 17.06.16.
  */
-public class ServiceProvider implements ServiceListener {
+public class ServiceLocator implements ServiceListener {
     private static final String SERVICE_TYPE = "_http._tcp.local.";
     private static final String SERVICE_NAME = "androeira_acc";
 
@@ -48,7 +48,7 @@ public class ServiceProvider implements ServiceListener {
 
     @Override
     public void serviceRemoved(ServiceEvent event) {
-        ServiceLocation serviceLocation = new ServiceLocation(event.getInfo().getPort(), event.getInfo().getInetAddress());
+        ServiceLocation serviceLocation = new ServiceLocation(event.getInfo().getNiceTextString(), event.getInfo().getPort(), event.getInfo().getInetAddress());
         serviceLocations.remove(serviceLocation);
         if (serviceRemovedListener != null){
             serviceRemovedListener.consume(serviceLocation);
@@ -57,7 +57,7 @@ public class ServiceProvider implements ServiceListener {
 
     @Override
     public void serviceResolved(ServiceEvent event) {
-        ServiceLocation serviceLocation = new ServiceLocation(event.getInfo().getPort(), event.getInfo().getInetAddress());
+        ServiceLocation serviceLocation = new ServiceLocation(event.getInfo().getNiceTextString(), event.getInfo().getPort(), event.getInfo().getInetAddress());
         serviceLocations.add(serviceLocation);
         if (serviceAddedListener != null) {
             serviceAddedListener.consume(serviceLocation);
@@ -65,8 +65,8 @@ public class ServiceProvider implements ServiceListener {
     }
 
     public static void main(String[] args) throws IOException {
-        ServiceProvider serviceProvider = new ServiceProvider();
-        serviceProvider.start();;
+        ServiceLocator serviceLocator = new ServiceLocator();
+        serviceLocator.start();;
     }
 
     public interface Consumer {

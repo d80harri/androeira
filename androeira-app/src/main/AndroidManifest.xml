@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="d80harri.org.app.socket.SocketListActivity"
+                  android:label="Sockets"/>
+
         <service
                 android:name="d80harri.org.app.AccLogService"
                 android:exported="false">

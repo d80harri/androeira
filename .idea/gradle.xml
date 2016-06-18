@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/androeira-analyzer" />
             <option value="$PROJECT_DIR$/androeira-app" />
+            <option value="$PROJECT_DIR$/socket" />
           </set>
         </option>
       </GradleProjectSettings>

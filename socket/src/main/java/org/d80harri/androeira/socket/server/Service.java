@@ -1,4 +1,6 @@
-package org.d80harri.androeira.analyzer;
+package org.d80harri.androeira.socket.server;
+
+import org.d80harri.androeira.socket.intf.AcceloratorRawData;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
@@ -13,9 +15,11 @@ import java.util.function.Consumer;
 /**
  * Created by d80harri on 17.06.16.
  */
-public class ConsumerService {
+public class Service {
     private static final String SERVICE_TYPE = "_http._tcp.local.";
     private static final String SERVICE_NAME = "androeira_acc";
+
+    private final String description;
 
     private JmDNS jmdns;
     private ServerSocket serverSocket;
@@ -24,11 +28,20 @@ public class ConsumerService {
 
     private Consumer<AcceloratorRawData> subscriber;
 
+    public Service() {
+        this.description = "Androeira Communication Socket";
+    }
+
+
+    public Service(String description) {
+        this.description = description;
+    }
+
     public void start() throws IOException {
         jmdns = JmDNS.create();
         serverSocket = new ServerSocket(0);
 
-        ServiceInfo info = ServiceInfo.create(SERVICE_TYPE, SERVICE_NAME, serverSocket.getLocalPort(), "Androeira consumer service");
+        ServiceInfo info = ServiceInfo.create(SERVICE_TYPE, SERVICE_NAME, serverSocket.getLocalPort(), description);
         jmdns.registerService(info);
 
         started = true;
@@ -36,6 +49,7 @@ public class ConsumerService {
     }
 
     public void stop() throws IOException {
+        started = false;
         jmdns.unregisterAllServices();
         jmdns.close();
         serverSocket.close();
@@ -69,8 +83,10 @@ public class ConsumerService {
     }
 
     public static void main(String[] args) throws IOException {
-        ConsumerService service = new ConsumerService();
+        Service service = new Service();
         service.start();
         System.out.println("Startee");
+        System.in.read();
+        service.stop();
     }
 }

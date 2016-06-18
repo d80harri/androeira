@@ -1,4 +1,4 @@
-package org.d80harri.androeira.analyzer;
+package org.d80harri.androeira.socket.intf;
 
 import java.io.Serializable;
 

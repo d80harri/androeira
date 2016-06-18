@@ -13,7 +13,7 @@
         tools:showIn="@layout/activity_main"
         tools:context="d80harri.org.app.MainActivity">
 
-    <ListView
+    <Button
             android:id="@+id/serviceList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

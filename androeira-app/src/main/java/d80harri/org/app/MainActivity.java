@@ -10,17 +10,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
+import android.widget.Button;
 import android.widget.TextView;
-import d80harri.org.app.socket.ServiceLocation;
-import d80harri.org.app.socket.ServiceProvider;
+import org.d80harri.androeira.socket.intf.ServiceLocation;
+import d80harri.org.app.socket.SocketListActivity;
+import org.d80harri.androeira.socket.client.ServiceLocator;
 
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private boolean started = false;
-    private ListView serviceList;
-    private ServiceProvider serviceProvider;
+    private Button serviceList;
+    private ServiceLocator serviceLocator = new ServiceLocator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,45 +30,47 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        this.serviceList = (ListView) findViewById(R.id.serviceList);
-        this.serviceProvider = new ServiceProvider();
+        serviceList = (Button) findViewById(R.id.serviceList);
+        serviceList.setOnClickListener(this::findService);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final TextView serviceStarted = (TextView) findViewById(R.id.serivceStarted);
         serviceStarted.setText("Service started: " + started);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (started) {
-                    Snackbar.make(view, "Logging stopped", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    Intent intent = new Intent(MainActivity.this, AccLogService.class);
-                    stopService(intent);
-                } else {
-                    Snackbar.make(view, "Logging started", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    Intent intent = new Intent(MainActivity.this, AccLogService.class);
-                    startService(intent);
-                }
-                started = !started;
-                serviceStarted.setText("Service started: " + started);
+        fab.setOnClickListener(view -> {
+            if (started) {
+                Snackbar.make(view, "Logging stopped", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, AccLogService.class);
+                stopService(intent);
+            } else {
+                Snackbar.make(view, "Logging started", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, AccLogService.class);
+                startService(intent);
             }
+            started = !started;
+            serviceStarted.setText("Service started: " + started);
         });
-            serviceProvider.setServiceAddedListener(this::onServiceAdded);
-            serviceProvider.setServiceRemovedListener(this::onServiceRemoved);
-            new AsyncTask<Void, Void, Void>(){
-                @Override
-                protected Void doInBackground(Void... params) {
-                    try {
-                        serviceProvider.start();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
+        serviceLocator.setServiceAddedListener(this::onServiceAdded);
+        serviceLocator.setServiceRemovedListener(this::onServiceRemoved);
+        new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    serviceLocator.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            }.execute();
+                return null;
+            }
+        }.execute();
+    }
 
+    private void findService(View view) {
+        Intent intent = new Intent(this, SocketListActivity.class);
+
+        startActivity(intent);
     }
 
     @Override
@@ -93,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onServiceAdded(ServiceLocation location) {
+        Snackbar.make(serviceList, "Server added (main)", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
         System.out.println(location.getAddress() + ": " + location.getPort());
 
     }
