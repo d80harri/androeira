@@ -1,11 +1,12 @@
 package org.d80harri.androeira.socket.intf;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 
 /**
  * Created by d80harri on 17.06.16.
  */
-public class ServiceLocation {
+public class ServiceLocation implements Serializable {
     private final String name;
     private final int port;
     private final InetAddress address;

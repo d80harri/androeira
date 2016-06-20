@@ -12,13 +12,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import org.d80harri.androeira.socket.intf.ServiceLocation;
 import d80harri.org.app.socket.SocketListActivity;
 import org.d80harri.androeira.socket.client.ServiceLocator;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int CHOOSE_SOCKET_REQUEST = 1;
+
     private boolean started = false;
     private Button serviceList;
     private ServiceLocator serviceLocator = new ServiceLocator();
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private void findService(View view) {
         Intent intent = new Intent(this, SocketListActivity.class);
 
-        startActivity(intent);
+        startActivityForResult(intent, CHOOSE_SOCKET_REQUEST);
     }
 
     @Override
@@ -105,5 +109,17 @@ public class MainActivity extends AppCompatActivity {
     private void onServiceRemoved(ServiceLocation location) {
         System.out.println(location.getAddress() + ": " + location.getPort());
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case CHOOSE_SOCKET_REQUEST:
+                ServiceLocation selectedLocation = (ServiceLocation) data.getSerializableExtra(SocketListActivity.LOCATION_RESULT);
+                Toast.makeText(this, selectedLocation.getName(), Toast.LENGTH_LONG).show();
+                serviceList.setText(selectedLocation.getName());
+                break;
+        }
     }
 }

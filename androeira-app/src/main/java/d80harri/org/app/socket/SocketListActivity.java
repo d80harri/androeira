@@ -2,6 +2,7 @@ package d80harri.org.app.socket;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -24,6 +25,8 @@ import java.util.List;
  * Created by d80harri on 18.06.16.
  */
 public class SocketListActivity extends ListActivity {
+    public static final String LOCATION_RESULT = "location";
+
     private ServiceLocator serviceLocator = new ServiceLocator();
 
     private ArrayAdapter<ServiceLocation> adapter;
@@ -79,10 +82,12 @@ public class SocketListActivity extends ListActivity {
     protected void onListItemClick(ListView list, View view, int position, long id) {
         super.onListItemClick(list, view, position, id);
 
-        String selectedItem = (String) getListView().getItemAtPosition(position);
-        //String selectedItem = (String) getListAdapter().getItem(position);
+        ServiceLocation selectedLocation = (ServiceLocation) getListView().getItemAtPosition(position);
 
-        text.setText("You clicked " + selectedItem + " at position " + position);
+        Intent intent = new Intent();
+        intent.putExtra(LOCATION_RESULT, selectedLocation);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     public static class SocketListAdapter extends ArrayAdapter<ServiceLocation> {
