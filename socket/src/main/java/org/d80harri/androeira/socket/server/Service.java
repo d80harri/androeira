@@ -6,6 +6,7 @@ import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -24,7 +25,7 @@ public class Service {
     private JmDNS jmdns;
     private ServerSocket serverSocket;
     private boolean started = false;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ExecutorService executor = Executors.newFixedThreadPool(2);
 
     private Consumer<AcceloratorRawData> subscriber;
 
@@ -55,6 +56,17 @@ public class Service {
         serverSocket.close();
     }
 
+    public int getLocalPort() {
+        return serverSocket.getLocalPort();
+    }
+
+    public InetAddress getInetAddress() {
+        return serverSocket.getInetAddress();
+    }
+
+    public void setSubscriber(Consumer<AcceloratorRawData> subscriber) {
+        this.subscriber = subscriber;
+    }
 
     private void socketLoop() {
         while (started) {
@@ -80,13 +92,5 @@ public class Service {
         } catch (ClassNotFoundException e) {
             e.printStackTrace(); // TODO
         }
-    }
-
-    public static void main(String[] args) throws IOException {
-        Service service = new Service();
-        service.start();
-        System.out.println("Startee");
-        System.in.read();
-        service.stop();
     }
 }
