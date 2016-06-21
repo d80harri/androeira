@@ -13,9 +13,12 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.d80harri.androeira.socket.client.Client;
+import org.d80harri.androeira.socket.intf.AcceloratorRawData;
 import org.d80harri.androeira.socket.intf.ServiceLocation;
 import d80harri.org.app.socket.SocketListActivity;
 import org.d80harri.androeira.socket.client.ServiceLocator;
+import org.d80harri.androeira.socket.server.Service;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean started = false;
     private Button serviceList;
     private ServiceLocator serviceLocator = new ServiceLocator();
+    private Client client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Logging started", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent intent = new Intent(MainActivity.this, AccLogService.class);
+                AccLogService.Callback callback = this::onSensorDataChanged;
+                intent.putExtra(AccLogService.CALLBACK_PARAM, callback);
                 startService(intent);
             }
             started = !started;
@@ -69,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
                 return null;
             }
         }.execute();
+    }
+
+    private void onSensorDataChanged(AcceloratorRawData acceloratorRawData) {
+        try {
+            client.post(acceloratorRawData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void findService(View view) {
@@ -117,6 +131,12 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case CHOOSE_SOCKET_REQUEST:
                 ServiceLocation selectedLocation = (ServiceLocation) data.getSerializableExtra(SocketListActivity.LOCATION_RESULT);
+                client = new Client(selectedLocation.getAddress(), selectedLocation.getPort());
+                try {
+                    client.openConnection();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Toast.makeText(this, selectedLocation.getName(), Toast.LENGTH_LONG).show();
                 serviceList.setText(selectedLocation.getName());
                 break;

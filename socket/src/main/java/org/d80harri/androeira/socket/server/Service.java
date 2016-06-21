@@ -93,4 +93,9 @@ public class Service {
             e.printStackTrace(); // TODO
         }
     }
+
+    public static void main(String[] args) {
+        Service consoleService = new Service("Console Service");
+        consoleService.setSubscriber(data -> System.out.print(data));
+    }
 }
