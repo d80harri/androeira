@@ -6,6 +6,7 @@ import org.d80harri.androeira.socket.intf.ServiceLocation;
 import javax.jmdns.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,6 +31,7 @@ public class ServiceLocator implements ServiceListener {
 
     public void start() throws IOException {
         jmdns = JmDNS.create();
+        Arrays.stream(jmdns.list(SERVICE_TYPE)).forEach(this::addServiceInfo);
         jmdns.addServiceListener(SERVICE_TYPE, this);
     }
 
@@ -48,7 +50,7 @@ public class ServiceLocator implements ServiceListener {
 
     @Override
     public void serviceRemoved(ServiceEvent event) {
-        ServiceLocation serviceLocation = new ServiceLocation(event.getInfo().getNiceTextString(), event.getInfo().getPort(), event.getInfo().getInetAddress());
+        ServiceLocation serviceLocation = new ServiceLocation(event.getInfo().getNiceTextString(), event.getInfo().getPort(), event.getInfo().getInetAddresses()[0]);
         serviceLocations.remove(serviceLocation);
         if (serviceRemovedListener != null){
             serviceRemovedListener.consume(serviceLocation);
@@ -57,7 +59,14 @@ public class ServiceLocator implements ServiceListener {
 
     @Override
     public void serviceResolved(ServiceEvent event) {
-        ServiceLocation serviceLocation = new ServiceLocation(event.getInfo().getNiceTextString(), event.getInfo().getPort(), event.getInfo().getInetAddress());
+        addServiceInfo(event.getInfo());
+    }
+
+    private void addServiceInfo(ServiceInfo info) {
+        ServiceLocation serviceLocation = new ServiceLocation(info.getNiceTextString(), info.getPort(), info.getInetAddress());
+        addServiceLocation(serviceLocation);
+    }
+    private void addServiceLocation(ServiceLocation serviceLocation) {
         serviceLocations.add(serviceLocation);
         if (serviceAddedListener != null) {
             serviceAddedListener.consume(serviceLocation);

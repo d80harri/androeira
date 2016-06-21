@@ -4,6 +4,7 @@ import org.d80harri.androeira.socket.intf.AcceloratorRawData;
 import org.d80harri.androeira.socket.intf.ServiceLocation;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -28,5 +29,22 @@ public class Client {
     public void post(AcceloratorRawData rawData) throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
         oos.writeObject(rawData);
+    }
+
+    public boolean isConnectionOpen() {
+        return socket != null;
+    }
+
+    public AcceloratorRawData read() throws IOException {
+        ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+        try {
+            return (AcceloratorRawData) ois.readObject();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("NYI");
+        }
+    }
+
+    public void closeConnection() throws IOException {
+        this.socket.close();
     }
 }

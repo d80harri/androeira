@@ -1,50 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.d80harri.androeira.analyzer.sensor.SensorPresenter">
    <children>
-      <ScrollPane hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" >
+      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <content>
-                  <GridPane >
-                     <children>
-                         <LineChart GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="xyChart">
-                           <xAxis>
-                               <NumberAxis autoRanging="true" side="BOTTOM" />
-                           </xAxis>
-                           <yAxis>
-                               <NumberAxis  side="LEFT"  />
-                           </yAxis>
-                         </LineChart>
-                         <LineChart fx:id="yzChart" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                             <xAxis>
-                                 <NumberAxis side="BOTTOM" />
-                             </xAxis>
-                             <yAxis>
-                                 <NumberAxis side="LEFT"  />
-                             </yAxis>
-                         </LineChart>
-                         <LineChart GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="xzChart">
-                             <xAxis>
-                                 <NumberAxis side="BOTTOM" />
-                             </xAxis>
-                             <yAxis>
-                                 <NumberAxis side="LEFT" />
-                             </yAxis>
-                         </LineChart>
-                     </children>
-                     <columnConstraints>
-                        <ColumnConstraints />
-                        <ColumnConstraints />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints />
-                        <RowConstraints />
-                     </rowConstraints>
-                  </GridPane>
+            <VBox>
+               <children>
+                   <ComboBox fx:id="serviceLocation" />
+                   <LineChart fx:id="acceleratorChart" createSymbols="false">
+                       <xAxis>
+                           <NumberAxis autoRanging="true" side="BOTTOM" fx:id="xAxis" />
+                       </xAxis>
+                       <yAxis>
+                           <NumberAxis autoRanging="true" side="LEFT" />
+                       </yAxis>
+                   </LineChart>
+               </children>
+            </VBox>
         </content>
       </ScrollPane>
    </children>

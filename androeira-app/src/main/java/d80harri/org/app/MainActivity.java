@@ -12,20 +12,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+import org.d80harri.androeira.socket.client.Client;
 import org.d80harri.androeira.socket.intf.ServiceLocation;
 import d80harri.org.app.socket.SocketListActivity;
 import org.d80harri.androeira.socket.client.ServiceLocator;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int CHOOSE_SOCKET_REQUEST = 1;
 
     private boolean started = false;
     private Button serviceList;
-    private ServiceLocator serviceLocator = new ServiceLocator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         serviceList = (Button) findViewById(R.id.serviceList);
-        serviceList.setOnClickListener(this::findService);
+        serviceList.setOnClickListener(this::startService);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final TextView serviceStarted = (TextView) findViewById(R.id.serivceStarted);
@@ -51,30 +48,18 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Logging started", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent intent = new Intent(MainActivity.this, AccLogService.class);
+
                 startService(intent);
             }
             started = !started;
             serviceStarted.setText("Service started: " + started);
         });
-        serviceLocator.setServiceAddedListener(this::onServiceAdded);
-        serviceLocator.setServiceRemovedListener(this::onServiceRemoved);
-        new AsyncTask<Void, Void, Void>(){
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    serviceLocator.start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        }.execute();
     }
 
-    private void findService(View view) {
+    private void startService(View view) {
         Intent intent = new Intent(this, SocketListActivity.class);
 
-        startActivityForResult(intent, CHOOSE_SOCKET_REQUEST);
+        startActivity(intent);
     }
 
     @Override
@@ -99,27 +84,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void onServiceAdded(ServiceLocation location) {
-        Snackbar.make(serviceList, "Server added (main)", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-        System.out.println(location.getAddress() + ": " + location.getPort());
-
-    }
-
-    private void onServiceRemoved(ServiceLocation location) {
-        System.out.println(location.getAddress() + ": " + location.getPort());
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case CHOOSE_SOCKET_REQUEST:
-                ServiceLocation selectedLocation = (ServiceLocation) data.getSerializableExtra(SocketListActivity.LOCATION_RESULT);
-                Toast.makeText(this, selectedLocation.getName(), Toast.LENGTH_LONG).show();
-                serviceList.setText(selectedLocation.getName());
-                break;
-        }
-    }
 }

@@ -24,7 +24,6 @@ public class CommunicationTest {
     public void init() throws IOException {
         service = new Service();
         service.start();
-
         client = new Client(service.getInetAddress(), service.getLocalPort());
         client.openConnection();
     }
@@ -44,5 +43,17 @@ public class CommunicationTest {
         Assertions.assertThat(acceloratorRawData.getX()).isEqualTo(1);
         Assertions.assertThat(acceloratorRawData.getY()).isEqualTo(2);
         Assertions.assertThat(acceloratorRawData.getZ()).isEqualTo(3);
+    }
+
+    @Test
+    public void stopClient() throws Throwable {
+        client.closeConnection();
+        service.post(new AcceloratorRawData(0, 1, 2, 3)); // shall not throw exception
+    }
+
+    @Test
+    public void stopServer() throws Throwable {
+        service.stop();
+        client.read(); // shall not throw exception
     }
 }

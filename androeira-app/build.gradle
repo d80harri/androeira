@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "org.d80harri.androeira"
         minSdkVersion 21
-        targetSdkVersion 23
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         jackOptions {
@@ -31,6 +31,7 @@ dependencies {
 
     compile project(':socket')
 
+    compile group: 'net.sf.m-m-m', name: 'mmm-util-backport-java.util.function', version: '1.0.1'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
 

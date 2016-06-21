@@ -7,13 +7,18 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
+import android.os.ResultReceiver;
+import android.telecom.Call;
+import org.d80harri.androeira.socket.intf.AcceloratorRawData;
+import org.d80harri.androeira.socket.server.Service;
 
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -22,19 +27,11 @@ import java.util.TimeZone;
  * helper methods.
  */
 public class AccLogService extends IntentService implements SensorEventListener {
-    static final DateFormat df;
-
-
-    static {
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
-        df.setTimeZone(tz);
-    }
 
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
-    private OutputStreamWriter writer;
     private boolean stopped = false;
+    private Service service = new Service(Build.MODEL);
 
     public AccLogService() throws FileNotFoundException {
         super("AccLogService");
@@ -42,6 +39,11 @@ public class AccLogService extends IntentService implements SensorEventListener 
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        try {
+            service.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while (!stopped) {
             try {
                 Thread.sleep(100);
@@ -68,10 +70,8 @@ public class AccLogService extends IntentService implements SensorEventListener 
     public void onDestroy() {
         super.onDestroy();
         senSensorManager.unregisterListener(this);
-
         try {
-            writer.flush();
-            writer.close();
+            service.stop();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,31 +82,17 @@ public class AccLogService extends IntentService implements SensorEventListener 
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
-        File folder = new File(Environment.getExternalStorageDirectory(), "androeira");
-        folder.mkdirs();
-        File file = new File(folder, df.format(new Date()) + ".acc.csv");
-        if (!file.exists())
-            file.createNewFile();
-
-        writer = new OutputStreamWriter(new FileOutputStream(file, true));
-
         senSensorManager.registerListener(this, senAccelerometer , SensorManager.SENSOR_DELAY_GAME);
     }
 
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append(event.timestamp);
-        for (float val : event.values) {
-            buffer.append(":" + val);
-        }
-
+        AcceloratorRawData acceloratorRawData = new AcceloratorRawData(event.timestamp, event.values[0], event.values[1], event.values[2]);
         try {
-            writer.write(buffer.toString() + "\n");
+            service.post(acceloratorRawData);
         } catch (IOException e) {
-            e.printStackTrace(); // TODO
+            e.printStackTrace();
         }
     }
 
@@ -114,4 +100,5 @@ public class AccLogService extends IntentService implements SensorEventListener 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
 }
