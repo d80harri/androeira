@@ -29,31 +29,11 @@ public class CommunicationTest {
     }
 
     @Test
-    public void writeData() throws Throwable {
-        AcceloratorRawData data = new AcceloratorRawData(0, 1, 2, 3);
-        CompletableFuture<AcceloratorRawData> futureData = new CompletableFuture<>();
-
-        service.setSubscriber(futureData::complete);
-
-        client.post(data);
-
-        AcceloratorRawData acceloratorRawData = futureData.get(MAX_WAIT_TIMEOUT, TimeUnit.MILLISECONDS);
-
-        Assertions.assertThat(acceloratorRawData.getTimestamp()).isEqualTo(0);
-        Assertions.assertThat(acceloratorRawData.getX()).isEqualTo(1);
-        Assertions.assertThat(acceloratorRawData.getY()).isEqualTo(2);
-        Assertions.assertThat(acceloratorRawData.getZ()).isEqualTo(3);
-    }
-
-    @Test
-    public void stopClient() throws Throwable {
-        client.closeConnection();
-        service.post(new AcceloratorRawData(0, 1, 2, 3)); // shall not throw exception
-    }
-
-    @Test
     public void stopServer() throws Throwable {
         service.stop();
-        client.read(); // shall not throw exception
+        AcceloratorRawData data = client.read(); // shall not throw exception
+
+        Assertions.assertThat(data).isNull();
+        Assertions.assertThat(client.isConnectionOpen()).isFalse();
     }
 }

@@ -11,6 +11,7 @@ import java.io.UncheckedIOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,11 +28,9 @@ public class Service {
 
     private JmDNS jmdns;
     private ServerSocket serverSocket;
-    private Map<Socket, SocketContext> sockets = new HashMap<>();
+    protected Map<Socket, SocketContext> sockets = new HashMap<>();
     private boolean started = false;
     private ExecutorService executor = Executors.newFixedThreadPool(2);
-
-    private Consumer<AcceloratorRawData> subscriber;
 
     public Service() {
         this.description = "Androeira Communication Socket";
@@ -81,60 +80,26 @@ public class Service {
         return serverSocket.getInetAddress();
     }
 
-    public void setSubscriber(Consumer<AcceloratorRawData> subscriber) {
-        this.subscriber = subscriber;
-    }
-
     private void socketLoop() {
         while (started) {
             Socket socket = null;
             try {
                 socket = serverSocket.accept();
                 this.sockets.put(socket, new SocketContext(socket));
-
-                ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
-                executor.submit(() -> processStream(is));
             } catch (IOException e) {
                 e.printStackTrace(); // TODO
             }
         }
     }
 
-    private void processStream(ObjectInputStream is) {
-        try {
-            AcceloratorRawData data = (AcceloratorRawData) is.readObject();
-            if (subscriber != null) {
-                subscriber.accept(data);
-            }
-        } catch (IOException e) {
-            e.printStackTrace(); // TODO
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace(); // TODO
-        }
-    }
-
     public void post(AcceloratorRawData acceloratorRawData) throws IOException {
-        List<Socket> unbound = new ArrayList<>();
-
         for (SocketContext socketContext : sockets.values()) {
                 ObjectOutputStream oos = socketContext.getOos();
-            oos.writeObject(acceloratorRawData);
-        }
-    }
-
-    public static void main(String[] args) throws Throwable {
-        Service consoleService = new Service("Console Service");
-        consoleService.start();
-
-        AcceloratorRawData data = new AcceloratorRawData(-1, 0, 0, 0);
-        Random random = new Random();
-        for (;;){
-            data.setTimestamp(System.nanoTime());
-            data.setX(data.getX() + (float)(random.nextGaussian()*2f));
-            data.setY(data.getY() + (float)(random.nextGaussian()*2f));
-            data.setZ(data.getZ() + (float)(random.nextGaussian()*2f));
-            consoleService.post(data);
-            Thread.sleep(100);
+            try {
+                oos.writeObject(acceloratorRawData);
+            } catch (SocketException ex) {
+                this.sockets.remove(socketContext.socket);
+            }
         }
     }
 
@@ -152,6 +117,23 @@ public class Service {
                 oos = new ObjectOutputStream(socket.getOutputStream());
             }
             return oos;
+        }
+    }
+
+
+    public static void main(String[] args) throws Throwable {
+        Service consoleService = new Service("Console Service");
+        consoleService.start();
+
+        AcceloratorRawData data = new AcceloratorRawData(-1, 0, 0, 0);
+        Random random = new Random();
+        for (;;){
+            data.setTimestamp(System.nanoTime());
+            data.setX(data.getX() + (float)(random.nextGaussian()*2f));
+            data.setY(data.getY() + (float)(random.nextGaussian()*2f));
+            data.setZ(data.getZ() + (float)(random.nextGaussian()*2f));
+            consoleService.post(data);
+            Thread.sleep(100);
         }
     }
 }

@@ -3,6 +3,7 @@ package org.d80harri.androeira.socket.client;
 import org.d80harri.androeira.socket.intf.AcceloratorRawData;
 import org.d80harri.androeira.socket.intf.ServiceLocation;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -36,7 +37,13 @@ public class Client {
     }
 
     public AcceloratorRawData read() throws IOException {
-        ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+        ObjectInputStream ois;
+        try {
+            ois = new ObjectInputStream(socket.getInputStream());
+        } catch (EOFException ex) {
+            socket = null;
+            return null;
+        }
         try {
             return (AcceloratorRawData) ois.readObject();
         } catch (ClassNotFoundException e) {
