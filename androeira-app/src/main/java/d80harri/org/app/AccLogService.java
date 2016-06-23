@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.ResultReceiver;
 import android.telecom.Call;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.d80harri.androeira.socket.intf.AcceloratorRawData;
 import org.d80harri.androeira.socket.server.Service;
 
@@ -28,6 +30,8 @@ import java.util.*;
  */
 public class AccLogService extends IntentService implements SensorEventListener {
 
+    private static final Logger logger = LogManager.getLogger();
+
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
     private boolean stopped = false;
@@ -42,13 +46,13 @@ public class AccLogService extends IntentService implements SensorEventListener 
         try {
             service.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         while (!stopped) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
     }
@@ -92,7 +96,7 @@ public class AccLogService extends IntentService implements SensorEventListener 
         try {
             service.post(acceloratorRawData);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 

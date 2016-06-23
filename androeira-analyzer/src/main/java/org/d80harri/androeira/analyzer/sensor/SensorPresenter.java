@@ -19,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import org.apache.logging.log4j.Logger;
 import org.d80harri.androeira.socket.client.Client;
 import org.d80harri.androeira.socket.client.ServiceLocator;
 import org.d80harri.androeira.socket.intf.AcceloratorRawData;
@@ -35,8 +36,11 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.logging.LogManager;
 
 public class SensorPresenter implements Initializable {
+    private static final Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+
     @FXML
     public NumberAxis xAxis;
     @FXML
@@ -103,7 +107,7 @@ public class SensorPresenter implements Initializable {
                         });
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage(), e);
                 }
             }).start();
         });
@@ -119,7 +123,7 @@ public class SensorPresenter implements Initializable {
         try {
             serviceLocator.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 

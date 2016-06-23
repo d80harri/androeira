@@ -1,5 +1,7 @@
 package org.d80harri.androeira.socket.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.d80harri.androeira.socket.intf.AcceloratorRawData;
 
 import javax.jmdns.JmDNS;
@@ -21,6 +23,8 @@ import java.util.function.Consumer;
  * Created by d80harri on 17.06.16.
  */
 public class Service {
+    private static final Logger logger = LogManager.getLogger();
+
     private static final String SERVICE_TYPE = "_http._tcp.local.";
     private static final String SERVICE_NAME = "androeira_acc";
 
@@ -87,7 +91,7 @@ public class Service {
                 socket = serverSocket.accept();
                 this.sockets.put(socket, new SocketContext(socket));
             } catch (IOException e) {
-                e.printStackTrace(); // TODO
+                logger.error(e.getMessage(), e);
             }
         }
     }
