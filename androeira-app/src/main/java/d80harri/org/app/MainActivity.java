@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 import org.d80harri.androeira.socket.client.Client;
 import org.d80harri.androeira.socket.intf.ServiceLocation;
 import d80harri.org.app.socket.SocketListActivity;
@@ -22,7 +23,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     private boolean started = false;
-    private Button serviceList;
+    private ToggleButton serviceStarted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +32,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        serviceList = (Button) findViewById(R.id.serviceList);
-        serviceList.setOnClickListener(this::startService);
+        serviceStarted = (ToggleButton) findViewById(R.id.startService);
+        serviceStarted.setOnClickListener(this::startService);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        final TextView serviceStarted = (TextView) findViewById(R.id.serivceStarted);
-        serviceStarted.setText("Service started: " + started);
-
-        fab.setOnClickListener(view -> {
+        serviceStarted.setOnClickListener( view -> {
             if (started) {
                 Snackbar.make(view, "Logging stopped", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -52,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 startService(intent);
             }
             started = !started;
-            serviceStarted.setText("Service started: " + started);
         });
     }
 
@@ -60,28 +56,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SocketListActivity.class);
 
         startActivity(intent);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 }

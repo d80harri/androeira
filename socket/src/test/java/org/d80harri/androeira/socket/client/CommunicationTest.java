@@ -7,9 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Created by d80harri on 20.06.16.
@@ -35,5 +33,19 @@ public class CommunicationTest {
 
         Assertions.assertThat(data).isNull();
         Assertions.assertThat(client.isConnectionOpen()).isFalse();
+    }
+
+
+    @Test
+    public void readData() throws Throwable {
+        AcceloratorRawData read;
+
+        service.post(new AcceloratorRawData(0, 1, 2, 3));
+        read = client.read();
+        Assertions.assertThat(read.getTimestamp()).isEqualTo(0);
+
+        service.post(new AcceloratorRawData(10, 1, 2, 3));
+        read = client.read();
+        Assertions.assertThat(read.getTimestamp()).isEqualTo(10);
     }
 }

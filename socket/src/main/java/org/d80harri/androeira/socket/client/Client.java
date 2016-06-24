@@ -17,10 +17,23 @@ public class Client {
     private InetAddress inetAddress;
     private int port;
     private Socket socket;
+    private ObjectInputStream ois;
 
     public Client(InetAddress inetAddress, int port) {
         this.inetAddress = inetAddress;
         this.port = port;
+    }
+
+    protected ObjectInputStream getOis() throws IOException {
+        if (socket!=null && ois == null) {
+            try {
+                ois = new ObjectInputStream(socket.getInputStream());
+            } catch (EOFException ex) {
+                socket = null;
+                return null;
+            }
+        }
+        return ois;
     }
 
     public void openConnection() throws IOException {
@@ -37,18 +50,16 @@ public class Client {
     }
 
     public AcceloratorRawData read() throws IOException {
-        ObjectInputStream ois;
+        AcceloratorRawData result = null;
+
         try {
-            ois = new ObjectInputStream(socket.getInputStream());
-        } catch (EOFException ex) {
-            socket = null;
-            return null;
-        }
-        try {
-            return (AcceloratorRawData) ois.readObject();
+            if (getOis() != null) {
+                result = (AcceloratorRawData) getOis().readObject();
+            }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("NYI");
         }
+        return result;
     }
 
     public void closeConnection() throws IOException {

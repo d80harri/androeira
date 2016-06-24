@@ -1,26 +1,19 @@
 package d80harri.org.app;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.ResultReceiver;
-import android.telecom.Call;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.d80harri.androeira.socket.intf.AcceloratorRawData;
 import org.d80harri.androeira.socket.server.Service;
 
-import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -30,7 +23,7 @@ import java.util.*;
  */
 public class AccLogService extends IntentService implements SensorEventListener {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = Logger.getLogger(AccLogService.class);
 
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
