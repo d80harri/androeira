@@ -12,4 +12,5 @@ dependencies {
 
 
     testCompile 'junit:junit:4.11'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.4.1'
 }
