@@ -13,7 +13,7 @@ import java.util.concurrent.*;
  * Created by d80harri on 20.06.16.
  */
 public class CommunicationTest {
-    private static final long MAX_WAIT_TIMEOUT = 50000;
+    private static final long MAX_WAIT_TIMEOUT = 15000;
 
     private Service service;
     private Client client;
@@ -26,7 +26,7 @@ public class CommunicationTest {
         client.openConnection();
     }
 
-    @Test
+    @Test(timeout = MAX_WAIT_TIMEOUT)
     public void stopServer() throws Throwable {
         service.stop();
         AcceloratorRawData data = client.read(); // shall not throw exception
@@ -36,7 +36,7 @@ public class CommunicationTest {
     }
 
 
-    @Test
+    @Test(timeout = MAX_WAIT_TIMEOUT)
     public void readData() throws Throwable {
         AcceloratorRawData read;
 

@@ -12,6 +12,7 @@ import java.io.IOException;
  * Created by d80harri on 22.06.16.
  */
 public class ServiceTest {
+    private static final long MAX_WAIT_TIMEOUT = 15000;
 
     private Service service;
     private Client client;
@@ -24,7 +25,7 @@ public class ServiceTest {
         client.openConnection();
     }
 
-    @Test
+    @Test(timeout = MAX_WAIT_TIMEOUT)
     public void stopClient() throws Throwable {
         Assertions.assertThat(service.sockets.keySet()).hasSize(1);
 
