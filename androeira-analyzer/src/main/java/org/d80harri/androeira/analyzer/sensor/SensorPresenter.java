@@ -1,45 +1,29 @@
 package org.d80harri.androeira.analyzer.sensor;
 
 import javafx.application.Platform;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.d80harri.androeira.socket.client.Client;
 import org.d80harri.androeira.socket.client.ServiceLocator;
 import org.d80harri.androeira.socket.intf.AcceloratorRawData;
 import org.d80harri.androeira.socket.intf.ServiceLocation;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.net.InetAddress;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.logging.LogManager;
 
 public class SensorPresenter implements Initializable {
-    private static final Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+    private static final Logger logger = Logger.getLogger(SensorPresenter.class);
 
     @FXML
     public NumberAxis xAxis;
