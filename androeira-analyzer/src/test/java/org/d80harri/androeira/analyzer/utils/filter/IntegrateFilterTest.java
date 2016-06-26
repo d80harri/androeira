@@ -1,11 +1,8 @@
-package org.d80harri.androeira.analyzer.filter;
+package org.d80harri.androeira.analyzer.utils.filter;
 
 import org.assertj.core.api.Assertions;
 import org.d80harri.androeira.socket.intf.AcceloratorRawData;
-import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by d80harri on 24.06.16.

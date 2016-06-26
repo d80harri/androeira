@@ -1,4 +1,4 @@
-package org.d80harri.androeira.analyzer.filter;
+package org.d80harri.androeira.analyzer.utils.filter;
 
 import org.d80harri.androeira.socket.intf.AcceloratorRawData;
 
