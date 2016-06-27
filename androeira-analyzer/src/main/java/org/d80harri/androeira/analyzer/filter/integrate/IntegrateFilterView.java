@@ -11,4 +11,9 @@ public class IntegrateFilterView extends FXMLView implements IFilterView {
     public String getName() {
         return "Integrate Filter";
     }
+
+    @Override
+    public IntegrateFilterPresenter getPresenter() {
+        return (IntegrateFilterPresenter) super.getPresenter();
+    }
 }

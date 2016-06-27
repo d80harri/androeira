@@ -9,4 +9,6 @@ public interface IFilterView {
     Parent getView();
 
     String getName();
+
+    IFilterPresenter getPresenter();
 }

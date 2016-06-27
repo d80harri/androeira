@@ -14,8 +14,8 @@
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <children>
-                        <Label text="Integrate" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <CheckBox fx:id="integrate" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <Label text="Interpolate" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <CheckBox fx:id="interpolate" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                     </children>
                <rowConstraints>
                   <RowConstraints />
